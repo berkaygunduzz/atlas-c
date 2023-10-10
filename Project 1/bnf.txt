@@ -1,51 +1,38 @@
-<program>         → <statement>*
-<statement>       → "const" <identifier> "=" <expression> ";"
+<program> → <statement>*
+<statement> → "const" <identifier> "=" <int> ";"
                    | "var" <identifier> ";"
                    | "var" <identifier> "=" <expression> ";"
                    | <identifier> "=" <expression> ";"
-                   | "if" "(" <condition> ")" "{" <stmts> "}" ";"
+                   | "if" "(" <condition> ")" "{" <stmts> "}" “;”
                    | "if" "(" <condition> ")" "{" <stmts> "}" "else" "{" <stmts> "}" ";"
                    | "while" "(" <condition> ")" "{" <stmts> "}" ";"
                    | "in" "();" ";"
                    | "out" "(" <output_param> ")" ";"
                    | "var" "[" <int> "]" <identifier> ";"
-                   | <identifier> "[" <int> "]" "=" <int> ";"
+                   | <identifier> "[" <int> "]" "=" <asgn_term> ";"
                    | <function_definition> ";"
-
-<expression>      → <term> | <term> <op> <expression>
-
-<term>            → <int>
+<expression> → <term> | <term> <op> <expression>
+<asgn_term> → <int>
+                            | <func_call>
+                            | <identifier>
+                            | "(" <expression> ")"
+<term> → <asgn_term>
                    | <arr>
                    | <op>
-                   | <func_call>
-                   | <identifier>
-                   | "(" <expression> ")"
-
-<op>              → "+" | "-" | "*" | "/" | "mod" | "^"
-
-<condition>       → <expression> <comparison_operator> <expression>
-
+<op> → "+" | "-" | "*" | "/" | "mod" | "^"
+<condition> → <expression> <comparison_operator> <expression>
 <comparison_operator> → "==" | "!=" | "<" | "<=" | ">" | ">=" | "and" | "or"
-
-<stmts>           → <statement>*
-
+<stmts> → <statement>*
 <function_definition> → <identifier> "(" <parameters> ")" "=>" "{" <stmts> "; return" <expression> "}"
-
-<parameters>      → <parameter> ("," <parameter>)*
-
-<parameter>       → <int>
-
-<int>             → <digit>+
-<arr>             → "[" <int> "]"
-<identifier>      → <letter> <identifier_tail>*
+<parameters> → <parameter> ("," <parameter>)*
+<parameter> → <int>
+<int> → <digit>+
+<arr> → "[" <int> "]"
+<identifier> → <letter> <identifier_tail>*
 <identifier_tail> → <letter> | <digit> | "_"
-
-<string>          → '"' <char>* '"'
-
-<digit>           → "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
-<letter>          → "a" | "b" | "c" | ... | "z" | "A" | "B" | "C" | ... | "Z"
-<char>            → any valid character
-
-<output_param>    → <expression> | <string> | <concatenation>
-
-<concatenation>   → <output_param> "," <output_param>
+<string> → '"' <char>* '"'
+<digit> → "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
+<letter> → "a" | "b" | "c" | ... | "z" | "A" | "B" | "C" | ... | "Z"
+<char> → any valid character
+<concatenation> → <output_param> "," <output_param>
+<output_param> → <expression> | <string> | <concatenation>
