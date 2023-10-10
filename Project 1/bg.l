@@ -15,30 +15,32 @@
 "=="         { printf("EQ "); }
 "!="         { printf("NEQ "); }
 "<"          { printf("LT "); }
+"<="         { printf("LTE "); }
 ">"          { printf("GT "); }
+">="         { printf("GTE "); }
 "and"        { printf("AND "); }
 "or"         { printf("OR "); }
 "+"          { printf("PLUS "); }
 "-"          { printf("MINUS "); }
-"*"          { printf("MULTIPLY "); }
-"/"          { printf("DIVIDE "); }
+"*"          { printf("MULT "); }
+"/"          { printf("DIV "); }
 "mod"        { printf("MOD "); }
-"\^"         { printf("POWER "); }
-"("          { printf("LPAREN "); }
-")"          { printf("RPAREN "); }
+"\^"         { printf("POW "); }
+"("          { printf("LPAR "); }
+")"          { printf("RPAR "); }
 "{"          { printf("LBRACE "); }
 "}"          { printf("RBRACE "); }
-"\["         { printf("LBRACKET "); }
-"\]"         { printf("RBRACKET "); }
-"="          { printf("ASSIGN "); }
-";"          { printf("SEMICOLON "); }
-","          { printf("COMMA "); }
-\"[^"]*\"    { printf("STRING "); }
+"\["         { printf("LBRAKET "); }
+"\]"         { printf("RBRAKET "); }
+"="          { printf("ASGN "); }
+";"          { printf("SC "); }
+","          { printf("COM "); }
+\"[^"]*\"    { printf("STR "); }
 \/\*[^*]*\*\/ { printf("COMMENT "); }
-[a-zA-Z][a-zA-Z0-9_]* { printf("IDENTIFIER "); }
+[a-zA-Z][a-zA-Z0-9_]* { printf("ID "); }
 [ \t]        ;
 \n           { printf("\n"); }
-.            { printf("UNKNOWN "); printf("Unknown character "); }
+.            { printf("UNKNOWN "); }
 
 %%
 
