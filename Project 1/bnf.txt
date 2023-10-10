@@ -24,7 +24,7 @@
 
 <condition>       ::= <expression> <comparison_operator> <expression>
 
-<comparison_operator> ::= "==" | "!=" | "<" | ">" | "and" | "or"
+<comparison_operator> ::= "==" | "!=" | "<" | "<=" | ">" | ">=" | "and" | "or"
 
 <stmts>           ::= <statement>*
 
