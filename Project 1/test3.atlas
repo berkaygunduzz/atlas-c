@@ -1,6 +1,6 @@
 /* Define a Linear Search Function ( where n is the searched value ) */
 func foo ( n ) {
-  out("Searching ", n, " in the array...")
+  out("Searching ", n, " in the array...\n")
   var index = 0;
   var found = 0;
   while (index < 10 || found == 1){
@@ -10,12 +10,12 @@ func foo ( n ) {
     index = index + 1;
   };
   if (found == 1){
-    out("Found ", n, " in the array.");
+    out("Found ", n, " in the array.\n");
     /* Fixing the index */
     index = index -1;
   }
   else {
-    out("Couldn't found ", n, " in the array.");
+    out("Couldn't found ", n, " in the array.\n");
     /* Notifying user that no n was in the array by changing index to impossible index value */
     index = -1;
   };
@@ -44,7 +44,7 @@ var result = -1;
 
 result = foo(searched);
 if (result != -1){
-  out( searched, " is found in index ", result, " of the array." );
+  out( searched, " is found in index ", result, " of the array.\n" );
 };
 
 
