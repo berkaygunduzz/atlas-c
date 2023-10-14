@@ -19,9 +19,9 @@ searched = in();
 var result = -1;
 
 result = foo(searched);
-
-out( searched, " is found in index ", result, " of the array.\n" );
-
+if (result != -1){
+  out( searched, " is found in index ", result, " of the array.\n" );
+}
 
 /* Define a Linear Search Function ( where n is the searched value ) */
 func foo ( n ) {
