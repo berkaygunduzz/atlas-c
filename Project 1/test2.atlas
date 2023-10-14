@@ -2,7 +2,7 @@
 func foo (p, q) => {
     out("Function name: foo\n");
     out("Variable p: ", p, "\n");
-    out("Variable q: ", q), "\n";
+    out("Variable q: ", q, "\n");
 
     var largest;
     if ( p > q) {
