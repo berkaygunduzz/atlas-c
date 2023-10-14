@@ -1,8 +1,8 @@
 /* Define a function */
 func foo (p, q) => {
-    out("Function name: foo");
-    out("Variable p: ", p);
-    out("Variable q: ", q);
+    out("Function name: foo\n");
+    out("Variable p: ", p, "\n");
+    out("Variable q: ", q), "\n";
 
     var largest;
     if ( p > q) {
@@ -42,7 +42,7 @@ while ( i < 4 ) {
     while ( j < 3 ) {
         b = arr_2 [j];
         c = foo (a, b);
-        out("a: ", a, " b: ", b, " c: ", c);
+        out("a: ", a, " b: ", b, " c: ", c, "\n");
 
         j = j + 1;
     };
