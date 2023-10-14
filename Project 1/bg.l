@@ -11,6 +11,8 @@
 "while"      { printf("WHILE "); }
 "in"         { printf("IN "); }
 "out"        { printf("OUT "); }
+"return"     { printf("RETURN "); }
+"func"       { printf("FUNCTION "); }
 [0-9]+       { printf("INT "); }
 "=="         { printf("EQ "); }
 "!="         { printf("NEQ "); }
@@ -33,6 +35,7 @@
 "\["         { printf("LBRAKET "); }
 "\]"         { printf("RBRAKET "); }
 "="          { printf("ASGN "); }
+"=>"         { printf("FASGN "); }
 ";"          { printf("SC "); }
 ","          { printf("COM "); }
 \"[^"]*\"    { printf("STR "); }
