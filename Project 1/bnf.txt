@@ -1,38 +1,37 @@
-<program> → <statement>*
-<statement> → "const" <identifier> "=" <int> ";"
-                   | "var" <identifier> ";"
-                   | "var" <identifier> "=" <expression> ";"
-                   | <identifier> "=" <expression> ";"
-                   | "if" "(" <condition> ")" "{" <stmts> "}" “;”
-                   | "if" "(" <condition> ")" "{" <stmts> "}" "else" "{" <stmts> "}" ";"
-                   | "while" "(" <condition> ")" "{" <stmts> "}" ";"
-                   | "in" "();" ";"
-                   | "out" "(" <output_param> ")" ";"
-                   | "var" "[" <int> "]" <identifier> ";"
-                   | <identifier> "[" <int> "]" "=" <asgn_term> ";"
-                   | <function_definition> ";"
-<expression> → <term> | <term> <op> <expression>
-<asgn_term> → <int>
-                            | <func_call>
-                            | <identifier>
-                            | "(" <expression> ")"
-<term> → <asgn_term>
-                   | <arr>
-                   | <op>
-<op> → "+" | "-" | "*" | "/" | "mod" | "^"
-<condition> → <expression> <comparison_operator> <expression>
-<comparison_operator> → "==" | "!=" | "<" | "<=" | ">" | ">=" | "and" | "or"
-<stmts> → <statement>*
-<function_definition> → <identifier> "(" <parameters> ")" "=>" "{" <stmts> "; return" <expression> "}"
-<parameters> → <parameter> ("," <parameter>)*
-<parameter> → <int>
-<int> → <digit>+
-<arr> → "[" <int> "]"
-<identifier> → <letter> <identifier_tail>*
-<identifier_tail> → <letter> | <digit> | "_"
-<string> → '"' <char>* '"'
-<digit> → "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
-<letter> → "a" | "b" | "c" | ... | "z" | "A" | "B" | "C" | ... | "Z"
-<char> → any valid character
-<concatenation> → <output_param> "," <output_param>
-<output_param> → <expression> | <string> | <concatenation>
+  <program> ::= <stmts>
+    <stmts> ::= <stmt> | <stmt> ; | <stmt> ; <stmts>
+     <stmt> ::= const <id> = <expr>
+              | var <id>
+              | var <id> = <expr>
+              | <id> = <expr>
+              | if ( <cond> ) { <stmts> }
+              | if ( <cond> ) { <stmts> } else { <stmts> }
+              | while ( <cond> ) { <stmts> }
+              | out ( <out_param> )
+              | var <arr>
+              | <arr> = <expr>
+              | return <expr>
+              | <func_def>
+              | <func_call>
+<out_param> ::= <expr> | <str> | <expr> , <out_param> | <str> , <out_param>
+ <func_def> ::= <id> ( <param_def> ) => { <stmts> }
+<param_def> ::= | <id> | <id> , <param_def>
+     <expr> ::= <term> | <term> <op> <expr>
+     <term> ::= <id> | <int> | <in> | <func_call> | <arr> | ( <expr> )
+       <in> ::= in ( )
+      <arr> ::= <id> [ <expr> ]
+     <cond> ::= <expr> <comp_op> <expr> | <expr> <comp_op> <cond>
+       <op> ::= + | - | * | / | mod  | ^
+  <comp_op> ::= == | != | < | <= | > | >= | and | or
+      <int> ::= <digit> | <digit> <int>
+<func_call> ::= <id> ( <params> )
+   <params> ::= | <expr> | <expr> , <params>
+       <id> ::= <letter> | <letter> <id_chars>
+ <id_chars> ::= <id_char> | <id_char> <id_chars>
+  <id_char> ::= <letter> | <digit> | _
+      <str> ::= "" | " <char_list> "
+<char_list> ::= <letter> | <digit> | <special> | <letter> <char_list>
+              | <digit> <char_list> | <special> <char_list>
+    <digit> ::= 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+   <letter> ::= a | b | c | ... | z | A | B | C | ... | Z
+  <special> ::= ’ | + | - | * | / | ^ | ! | ? | % | & |   | ( | ) | [ | ] | { | } | = | . | , | ; | : | _ | \n
