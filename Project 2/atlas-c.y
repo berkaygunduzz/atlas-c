@@ -1,6 +1,8 @@
 %{
 #include <stdio.h>
 #include <stdlib.h>
+//#include "y.tab.h"
+extern int yylineno;
 extern int yylex();
 extern void yyerror(const char*);
 %}
@@ -10,11 +12,11 @@ extern void yyerror(const char*);
     char *str_val;
 }
 
-%token <str_val> CONST VAR IF ELSE WHILE OUT RETURN FUNCTION
-%token <int_val> INT
+%token /*<str_val>*/ CONST VAR IF ELSE WHILE OUT RETURN FUNCTION
+%token /*<int_val>*/ INT
 %token EQ NEQ LT LTE GT GTE AND OR PLUS MINUS MULT DIV MOD POW
-%token LPAR RPAR LBRACE RBRACE LBRAKET RBRAKET ASGN FASGN SC COM NEWLINE
-%token STR ID
+%token LPAR RPAR LBRACE RBRACE LBRAKET RBRAKET ASGN FASGN SC COM NEWLINE UNKNOWN
+%token STR ID IN DIGIT
 
 %start program
 
@@ -61,7 +63,7 @@ expr: term
 
 term: ID
     | INT
-    | IN
+    | in
     | func_call
     | arr
     | LPAR expr RPAR /*LOOK*/
@@ -75,10 +77,10 @@ cond: expr comp_op expr
 
 comp_op: EQ | NEQ | LT | LTE | GT | GTE | AND | OR
 
-int: int_start int_end
+/*int: int_start int_end*/
 
-int_start:  | MINUS
-int_end: DIGIT | DIGIT int_end
+/*int_start:  | MINUS*/
+/*int_end: DIGIT | DIGIT int_end*/
 
 func_call: ID LPAR params RPAR
 
@@ -86,84 +88,6 @@ params: /* empty */
       | expr
       | expr COM params
 
-ID: LETTER id_chars
-
-id_chars: /* empty */
-         | id_char id_chars
-
-id_char: LETTER
-       | DIGIT
-       | _
-
-STR: DOUBLE_QUOTE char_list DOUBLE_QUOTE
-
-char_list: LETTER
-         | DIGIT
-         | SPECIAL
-         | LETTER char_list
-         | DIGIT char_list
-         | SPECIAL char_list
-
-DIGIT: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
-
-LETTER: a | b | c | d | e | f | g | h | i | j | k | l | m | n | o | p | q | r | s | t | u | v | w | x | y | z
-      | A | B | C | D | E | F | G | H | I | J | K | L | M | N | O | P | Q | R | S | T | U | V | W | X | Y | Z
-
-SPECIAL:  PLUS | MINUS | MULT | DIV | POW | EXCLAMATION | QUESTION | PERCENT | AMPERSAND | SPACE
-       | LPAR | RPAR | LBRACE | RBRACE | LBRAKET | RBRAKET | EQUALS | DOT | COMMA | SEMICOLON | COLON | UNDERSCORE
-       | NEWLINE | HASH | DOLLAR
-
-
-PLUS: +
-
-MINUS: -
-
-MULT: *
-
-DIV: /
-
-POW: ^
-
-EXCLAMATION: !
-
-QUESTION: ?
-
-PERCENT: %
-
-AMPERSAND: &
-
-SPACE: ' '
-
-LPAR: (
-
-RPAR: )
-
-LBRACE: {
-
-RBRACE: }
-
-LBRAKET: [
-
-RBRAKET: ]
-
-EQUALS: =
-
-DOT: .
-
-COMMA: ,
-
-SEMICOLON: ;
-
-COLON: :
-
-UNDERSCORE: _
-
-NEWLINE: \n
-
-HASH: #
-
-
-DOUBLE_QUOTE: \"
 
 %%
 
