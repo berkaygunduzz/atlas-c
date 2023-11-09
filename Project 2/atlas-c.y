@@ -10,63 +10,160 @@ extern void yyerror(const char*);
     char *str_val;
 }
 
-%token <str_val> CONST VAR IF ELSE WHILE IN OUT RETURN FUNCTION
+%token <str_val> CONST VAR IF ELSE WHILE OUT RETURN FUNCTION
 %token <int_val> INT
 %token EQ NEQ LT LTE GT GTE AND OR PLUS MINUS MULT DIV MOD POW
-%token LPAR RPAR LBRACE RBRACE LBRAKET RBRAKET ASGN FASGN SC COM NEWLINE STR ID COMMENT UNKNOWN
+%token LPAR RPAR LBRACE RBRACE LBRAKET RBRAKET ASGN FASGN SC COM NEWLINE
+%token STR ID
 
 %start program
 
 %%
 
-program: statement_list
+program: stmts
        | /* empty */
 
-statement_list: statement
-              | statement_list statement
+stmts: stmt SC
+     | stmt SC stmts
 
-statement: declaration
-         | assignment
-         | /* other statement types */
+stmt: CONST ID ASGN expr
+    | VAR ID
+    | VAR ID ASGN expr
+    | ID ASGN expr
+    | IF LPAR cond RPAR LBRACE stmts RBRACE
+    | IF LPAR cond RPAR LBRACE stmts RBRACE ELSE LBRACE stmts RBRACE
+    | WHILE LPAR cond RPAR LBRACE stmts RBRACE
+    | OUT LPAR out_param RPAR
+    | VAR arr
+    | arr ASGN expr
+    | RETURN expr
+    | func_def
+    | func_call
 
-declaration: CONST ID SC
-           | VAR ID SC
-           | FUNCTION ID LPAR parameter_list RPAR LBRACE statement_list RBRACE SC
-           | /* other declaration types */
+out_param: expr
+         | STR
+         | expr COM out_param
+         | STR COM out_param
 
-parameter_list: /* empty */
-              | parameter
-              | parameter_list COM parameter
+func_def: FUNCTION ID LPAR param_def RPAR FASGN LBRACE stmts RBRACE
 
-parameter: VAR ID
+param_def: /* empty */
+         | ID
+         | ID COM param_def
 
-assignment: ID ASGN expression SC
+expr: term
+    | term PLUS expr
+    | term MINUS expr
+    | term MULT expr
+    | term DIV expr
+    | term MOD expr
+    | term POW expr
 
-expression: INT
-          | ID
-          | STR
-          | expression PLUS expression
-          | expression MINUS expression
-          | expression MULT expression
-          | expression DIV expression
-          | expression MOD expression
-          | expression POW expression
-          | expression EQ expression
-          | expression NEQ expression
-          | expression LT expression
-          | expression LTE expression
-          | expression GT expression
-          | expression GTE expression
-          | expression AND expression
-          | expression OR expression
-          | LPAR expression RPAR
-          | FUNCTION_CALL ID LPAR argument_list RPAR
+term: ID
+    | INT
+    | IN
+    | func_call
+    | arr
+    | LPAR expr RPAR /*LOOK*/
 
-argument_list: /* empty */
-             | expression
-             | argument_list COM expression
+in: IN LPAR RPAR
 
-FUNCTION_CALL: "call"
+arr: ID LBRAKET expr RBRAKET
+
+cond: expr comp_op expr
+    | expr comp_op cond
+
+comp_op: EQ | NEQ | LT | LTE | GT | GTE | AND | OR
+
+int: int_start int_end
+
+int_start:  | MINUS
+int_end: DIGIT | DIGIT int_end
+
+func_call: ID LPAR params RPAR
+
+params: /* empty */
+      | expr
+      | expr COM params
+
+ID: LETTER id_chars
+
+id_chars: /* empty */
+         | id_char id_chars
+
+id_char: LETTER
+       | DIGIT
+       | _
+
+STR: DOUBLE_QUOTE char_list DOUBLE_QUOTE
+
+char_list: LETTER
+         | DIGIT
+         | SPECIAL
+         | LETTER char_list
+         | DIGIT char_list
+         | SPECIAL char_list
+
+DIGIT: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+
+LETTER: a | b | c | d | e | f | g | h | i | j | k | l | m | n | o | p | q | r | s | t | u | v | w | x | y | z
+      | A | B | C | D | E | F | G | H | I | J | K | L | M | N | O | P | Q | R | S | T | U | V | W | X | Y | Z
+
+SPECIAL:  PLUS | MINUS | MULT | DIV | POW | EXCLAMATION | QUESTION | PERCENT | AMPERSAND | SPACE
+       | LPAR | RPAR | LBRACE | RBRACE | LBRAKET | RBRAKET | EQUALS | DOT | COMMA | SEMICOLON | COLON | UNDERSCORE
+       | NEWLINE | HASH | DOLLAR
+
+
+PLUS: +
+
+MINUS: -
+
+MULT: *
+
+DIV: /
+
+POW: ^
+
+EXCLAMATION: !
+
+QUESTION: ?
+
+PERCENT: %
+
+AMPERSAND: &
+
+SPACE: ' '
+
+LPAR: (
+
+RPAR: )
+
+LBRACE: {
+
+RBRACE: }
+
+LBRAKET: [
+
+RBRAKET: ]
+
+EQUALS: =
+
+DOT: .
+
+COMMA: ,
+
+SEMICOLON: ;
+
+COLON: :
+
+UNDERSCORE: _
+
+NEWLINE: \n
+
+HASH: #
+
+
+DOUBLE_QUOTE: \"
 
 %%
 
