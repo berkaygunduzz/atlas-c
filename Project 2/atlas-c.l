@@ -1,16 +1,9 @@
-%{
-#include <stdio.h>
-#include <string.h>
-#include "atlas-c.tab.h"  // Include the Yacc-generated header file
-extern int yylineno;
-%}
-
-
 %%
 
 "const"      {   return CONST; }
 "var"        {   return VAR; }
 "if"         {   return IF; }
+"elif"       {   return ELIF; }
 "else"       {   return ELSE; }
 "while"      {   return WHILE; }
 "in"         {   return IN; }
@@ -46,7 +39,8 @@ extern int yylineno;
 \/\*[^*]*\*\/ { /* ignore comments */ }
 [a-zA-Z][a-zA-Z0-9_]* {   return ID; }
 [ \t]        ;
-\n           { yylineno++; return NEWLINE; }
+\n           { yylineno++; }
 .            { return UNKNOWN; }
 
 %%
+int yywrap() { return 1; }
