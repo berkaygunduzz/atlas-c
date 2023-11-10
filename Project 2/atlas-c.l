@@ -40,7 +40,7 @@
 [a-zA-Z][a-zA-Z0-9_]* {   return ID; }
 [ \t]        ;
 \n           { yylineno++; }
-.            { return UNKNOWN; }
+.            ;
 
 %%
 int yywrap() { return 1; }
