@@ -1,51 +1,36 @@
 %{
 #include <stdio.h>
-#include <stdlib.h>
-//#include "y.tab.h"
-extern int yylineno;
-extern int yylex();
-extern void yyerror(const char*);
 %}
 
-%union {
-    int int_val;
-    char *str_val;
-}
-
-%token /*<str_val>*/ CONST VAR IF ELSE WHILE OUT RETURN FUNCTION
-%token /*<int_val>*/ INT
-%token EQ NEQ LT LTE GT GTE AND OR PLUS MINUS MULT DIV MOD POW
-%token LPAR RPAR LBRACE RBRACE LBRAKET RBRAKET ASGN FASGN SC COM NEWLINE UNKNOWN
-%token STR ID IN DIGIT
-
-%start program
+%token CONST VAR IF ELIF ELSE WHILE IN OUT RETURN FUNCTION
+%token INT EQ NEQ LT LTE GT GTE AND OR PLUS MINUS MULT DIV MOD POW
+%token LPAR RPAR LBRACE RBRACE LBRAKET RBRAKET ASGN FASGN SC COM STR ID UNKNOWN
 
 %%
-
 program: stmts
-       | /* empty */
-
-stmts: stmt SC
-     | stmt SC stmts
+stmts: stmt
+    | stmt SC
+    | stmt SC stmts
 
 stmt: CONST ID ASGN expr
     | VAR ID
     | VAR ID ASGN expr
     | ID ASGN expr
     | IF LPAR cond RPAR LBRACE stmts RBRACE
+    | IF LPAR cond RPAR LBRACE stmts RBRACE else_if
+    | IF LPAR cond RPAR LBRACE stmts RBRACE else_if ELSE LBRACE stmts RBRACE
     | IF LPAR cond RPAR LBRACE stmts RBRACE ELSE LBRACE stmts RBRACE
     | WHILE LPAR cond RPAR LBRACE stmts RBRACE
     | OUT LPAR out_param RPAR
+    | VAR arr ASGN init_arr
     | VAR arr
     | arr ASGN expr
     | RETURN expr
     | func_def
     | func_call
 
-out_param: expr
-         | STR
-         | expr COM out_param
-         | STR COM out_param
+else_if: ELIF LPAR cond RPAR LBRACE stmts RBRACE
+       | ELIF LPAR cond RPAR LBRACE stmts RBRACE else_if
 
 func_def: FUNCTION ID LPAR param_def RPAR FASGN LBRACE stmts RBRACE
 
@@ -54,33 +39,43 @@ param_def: /* empty */
          | ID COM param_def
 
 expr: term
-    | term PLUS expr
-    | term MINUS expr
-    | term MULT expr
-    | term DIV expr
-    | term MOD expr
-    | term POW expr
+    | term op expr
 
 term: ID
     | INT
-    | in
+    | MINUS INT
+    | PLUS INT
+    | IN
     | func_call
     | arr
-    | LPAR expr RPAR /*LOOK*/
+    | cond
+    | LPAR expr RPAR
 
 in: IN LPAR RPAR
 
-arr: ID LBRAKET expr RBRAKET
+arr: ID arr_dims
+
+arr_dims: LBRAKET expr RBRAKET
+        | LBRAKET expr RBRAKET arr_dims
 
 cond: expr comp_op expr
     | expr comp_op cond
 
+op: PLUS | MINUS | MULT | DIV | MOD | POW
+
 comp_op: EQ | NEQ | LT | LTE | GT | GTE | AND | OR
 
-/*int: int_start int_end*/
+out_param: expr
+         | STR
+         | expr COM out_param
+         | STR COM out_param
 
-/*int_start:  | MINUS*/
-/*int_end: DIGIT | DIGIT int_end*/
+init_arr: LBRACE arr_val RBRACE
+
+arr_val: expr
+       | init_arr
+       | expr COM arr_val
+       | init_arr COM arr_val
 
 func_call: ID LPAR params RPAR
 
@@ -88,14 +83,21 @@ params: /* empty */
       | expr
       | expr COM params
 
-
 %%
 
-int main() {
-    yyparse();
-    return 0;
-}
+#include "atlas-c.lex.c"
+int lineno = 0;
+int valid_program = 1; // Initially, assume the program is valid
 
 void yyerror(const char *s) {
     fprintf(stderr, "Syntax error on line %d: %s\n", yylineno, s);
+    valid_program = 0; // Mark the program as invalid
+}
+
+int main() {
+    yyparse();
+    if (valid_program) {
+        printf("Input program is valid\n");
+    }
+    return 0;
 }
