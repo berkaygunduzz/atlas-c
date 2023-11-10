@@ -3,19 +3,20 @@
 %}
 
 %token CONST VAR IF ELIF ELSE WHILE IN OUT RETURN FUNCTION
-%token INT EQ NEQ LT LTE GT GTE AND OR PLUS MINUS MULT DIV MOD POW
-%token LPAR RPAR LBRACE RBRACE LBRAKET RBRAKET ASGN FASGN SC COM STR ID UNKNOWN
+%token INT EQ NEQ LT LTE GT GTE AND OR 
+%token LPAR RPAR LBRACE RBRACE LBRAKET RBRAKET SC COM STR ID
+%left PLUS MINUS MULT DIV MOD POW ASGN FASGN
 
 %%
-program: stmts
-stmts: stmt
-    | stmt SC
+program: stmts 
+    |
+stmts: stmt SC
     | stmt SC stmts
 
-stmt: CONST ID ASGN expr
-    | VAR ID
-    | VAR ID ASGN expr
-    | ID ASGN expr
+stmt: CONST ID asgn
+    | var_decl
+    | var_decl asgn
+    | ID asgn
     | IF LPAR cond RPAR LBRACE stmts RBRACE
     | IF LPAR cond RPAR LBRACE stmts RBRACE else_if
     | IF LPAR cond RPAR LBRACE stmts RBRACE else_if ELSE LBRACE stmts RBRACE
@@ -24,10 +25,14 @@ stmt: CONST ID ASGN expr
     | OUT LPAR out_param RPAR
     | VAR arr ASGN init_arr
     | VAR arr
-    | arr ASGN expr
+    | arr asgn
     | RETURN expr
     | func_def
     | func_call
+
+var_decl: VAR ID
+
+asgn: ASGN expr
 
 else_if: ELIF LPAR cond RPAR LBRACE stmts RBRACE
        | ELIF LPAR cond RPAR LBRACE stmts RBRACE else_if
@@ -45,7 +50,7 @@ term: ID
     | INT
     | MINUS INT
     | PLUS INT
-    | IN
+    | in
     | func_call
     | arr
     | cond
@@ -59,7 +64,6 @@ arr_dims: LBRAKET expr RBRAKET
         | LBRAKET expr RBRAKET arr_dims
 
 cond: expr comp_op expr
-    | expr comp_op cond
 
 op: PLUS | MINUS | MULT | DIV | MOD | POW
 
