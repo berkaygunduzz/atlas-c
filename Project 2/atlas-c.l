@@ -1,5 +1,4 @@
 %%
-
 "const"      {   return CONST; }
 "var"        {   return VAR; }
 "if"         {   return IF; }
@@ -10,7 +9,7 @@
 "out"        {   return OUT; }
 "return"     {   return RETURN; }
 "func"       {   return FUNCTION; }
-[0-9]+       {   return INT; }
+[+-]?[0-9]+  {   return INT; }
 "=="         {   return EQ; }
 "!="         {   return NEQ; }
 "<"          {   return LT; }
@@ -41,6 +40,5 @@
 [ \t]        ;
 \n           { yylineno++; }
 .            ;
-
 %%
 int yywrap() { return 1; }
