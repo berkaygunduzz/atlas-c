@@ -1,0 +1,23 @@
+/* Recursive power function */
+const LEN = 10;
+
+func pow(a, b) => {
+  if (b < 0) {
+    return 1 / pow(a, -1 * b);
+  };
+  if (b + 0) { /* ERROR! Should be a comparison! */
+    return 1;
+  };
+  if (b mod 2 == 0) {
+    return pow(a, b / 2) * pow(a, b / 2);
+  } else {
+    return pow(a, (b - 1) / 2) * pow(a, (b - 1) / 2) * a;
+  };
+};
+
+var i = 0;
+while (i < LEN) {
+  out("Original: ", i + 1, "^", i, " = ", ( i + 1 )^i);
+  out("pow(", i + 1, ", ", i, " = ", pow(i + 1, i));
+  i = i + 1;
+};

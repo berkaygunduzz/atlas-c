@@ -1,0 +1,20 @@
+/* Define a recursive factorial function */
+func foo ( n ) => {
+  if ( index < 2 ){
+    return 1;
+  }
+  else{
+    var a = n - 1; 
+    return foo( a )*n;
+  };
+  
+};
+
+/* Get Input */
+out("Calculate the factorial of: ");
+var x = in();
+
+
+out("Calculating of ", x, "...\n");
+var result = foo(x);
+out( "Factorial of ", x, " is ", result, ".\n" );

@@ -1,0 +1,51 @@
+/* Define a function */
+func foo (p, q) => {
+    out("Function name: foo\n");
+    out("Variable p: ", p, "\n");
+    out("Variable q: ", q, "\n");
+
+    var largest;
+    if ( p > q) {
+        largest = p;
+    } else {
+	largest = q;
+    };
+
+    return largest;
+} /* ERROR! Should end with semicolon ; */
+
+/* Define the array of {5, 0, 3, -7} */
+var arr_1 [4];
+arr_1 [0] = 5;
+arr_1 [1] = 0;
+arr_1 [2] = 3;
+arr_1 [3] = -7;
+
+/* Define the array of {9, -2, -1} */
+var arr_2 [3];
+arr_2 [0] = 9;
+arr_2 [1] = -2;
+arr_1 [2] = -1;
+
+/* Declare necessary variables */
+var a;
+var b;
+var c;
+var i = 0;
+var j = 0;
+
+/* Iterate through arr_1 */
+while ( i < 4 ) {
+    a = arr_1 [i];
+
+   /* Iterate through arr_2  */
+    while ( j < 3 ) {
+        b = arr_2 [j];
+        c = foo (a, b);
+        out("a: ", a, " b: ", b, " c: ", c, "\n");
+
+        j = j + 1;
+    };
+
+    i = i + 1;
+};
