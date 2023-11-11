@@ -3,11 +3,18 @@
 %}
 
 %token CONST VAR IF ELIF ELSE WHILE IN OUT RETURN FUNCTION
-%token INT EQ NEQ LT LTE GT GTE AND OR 
+%token INT ASGN FASGN
 %token LPAR RPAR LBRACE RBRACE LBRAKET RBRAKET SC COM STR ID
-%left PLUS MINUS MULT DIV MOD POW ASGN FASGN
+%left OR
+%left AND
+%left EQ NEQ
+%left LT LTE GT GTE
+%left PLUS MINUS
+%left MULT DIV MOD
+%right POW
 
 %%
+
 program: stmts 
     |
 stmts: stmt SC
@@ -17,10 +24,7 @@ stmt: CONST ID asgn
     | var_decl
     | var_decl asgn
     | ID asgn
-    | IF LPAR cond RPAR LBRACE stmts RBRACE
-    | IF LPAR cond RPAR LBRACE stmts RBRACE else_if
-    | IF LPAR cond RPAR LBRACE stmts RBRACE else_if ELSE LBRACE stmts RBRACE
-    | IF LPAR cond RPAR LBRACE stmts RBRACE ELSE LBRACE stmts RBRACE
+    | if_stmt
     | WHILE LPAR cond RPAR LBRACE stmts RBRACE
     | OUT LPAR out_param RPAR
     | VAR arr ASGN init_arr
@@ -34,26 +38,32 @@ var_decl: VAR ID
 
 asgn: ASGN expr
 
-else_if: ELIF LPAR cond RPAR LBRACE stmts RBRACE
-       | ELIF LPAR cond RPAR LBRACE stmts RBRACE else_if
+if_stmt: IF LPAR cond RPAR LBRACE stmts RBRACE else_part
 
-func_def: FUNCTION ID LPAR param_def RPAR FASGN LBRACE stmts RBRACE
+else_part: ELSE LBRACE stmts RBRACE
+         | ELIF LPAR cond RPAR LBRACE stmts RBRACE else_part
+         | /* empty */
 
-param_def: /* empty */
-         | ID
-         | ID COM param_def
+cond: or_expr
+
+or_expr: and_expr
+        | or_expr OR and_expr
+
+and_expr: comp_expr
+         | and_expr AND comp_expr
+
+comp_expr: expr
+         | expr comp_op expr
+         | LPAR expr comp_op expr RPAR
 
 expr: term
     | term op expr
 
 term: ID
     | INT
-    | MINUS INT
-    | PLUS INT
     | in
     | func_call
     | arr
-    | cond
     | LPAR expr RPAR
 
 in: IN LPAR RPAR
@@ -62,12 +72,6 @@ arr: ID arr_dims
 
 arr_dims: LBRAKET expr RBRAKET
         | LBRAKET expr RBRAKET arr_dims
-
-cond: expr comp_op expr
-
-op: PLUS | MINUS | MULT | DIV | MOD | POW
-
-comp_op: EQ | NEQ | LT | LTE | GT | GTE | AND | OR
 
 out_param: expr
          | STR
@@ -81,15 +85,36 @@ arr_val: expr
        | expr COM arr_val
        | init_arr COM arr_val
 
+func_def: FUNCTION ID LPAR param_def RPAR FASGN LBRACE stmts RBRACE
+
+param_def: /* empty */
+         | ID
+         | ID COM param_def
+
 func_call: ID LPAR params RPAR
 
 params: /* empty */
       | expr
       | expr COM params
 
+op: PLUS
+   | MINUS
+   | MULT
+   | DIV
+   | MOD
+   | POW
+
+comp_op: EQ
+        | NEQ
+        | LT
+        | LTE
+        | GT
+        | GTE
+
 %%
 
 #include "atlas-c.lex.c"
+
 int lineno = 0;
 int valid_program = 1; // Initially, assume the program is valid
 
