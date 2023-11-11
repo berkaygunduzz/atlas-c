@@ -3,7 +3,7 @@
 %}
 
 %token CONST VAR IF ELIF ELSE WHILE IN OUT RETURN FUNCTION
-%token INT ASGN FASGN
+%token INT
 %token LPAR RPAR LBRACE RBRACE LBRAKET RBRAKET SC COM STR ID
 %left OR
 %left AND
@@ -12,6 +12,7 @@
 %left PLUS MINUS
 %left MULT DIV MOD
 %right POW
+%right ASGN FASGN
 
 %%
 
