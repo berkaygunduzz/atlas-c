@@ -37,95 +37,95 @@ Atlas-C is a programming language inspired by C, JavaScript, and Python. To buil
 <if_stmt> ::= if ( <cond> ) { <stmts> } <else_part>
 
 <else_part> ::= else{ <stmts> }
-            | elif( <cond> ) { <stmts> } <else_part>
-            | 
+              | elif( <cond> ) { <stmts> } <else_part>
+              | 
 
 <cond> ::= <or_expr>
 
 <or_expr> ::= <and_expr>
-           | <or_expr> or <and_expr>
+            | <or_expr> or <and_expr>
 
 <and_expr> ::= <comp_expr>
-            | <and_expr> and <comp_expr>
+             | <and_expr> and <comp_expr>
 
 <comp_expr> ::= <expr>
-            | <expr> <comp_op> <expr>
-            | ( <expr> <comp_op> <expr> )
+             | <expr> <comp_op> <expr>
+             | ( <expr> <comp_op> <expr> )
 
 <expr> ::= <term>
-        | <term> <op> <expr>
+         | <term> <op> <expr>
 
 <term> ::= <id>
-        | <int>
-        | <in_function>
-        | <func_call>
-        | <arr>
-        | ( <expr> )
+         | <int>
+         | <in_function>
+         | <func_call>
+         | <arr>
+         | ( <expr> )
 
 <in_function> ::= <in> ( )
 
 <arr> ::= <id> <arr_dims>
 
 <arr_dims> ::= [ <expr> ]
-            | [ <expr> ] <arr_dims>
+             | [ <expr> ] <arr_dims>
 
 <out_param> ::= <expr>
-             | <str>
-             | <expr> , <out_param>
-             | <str> , <out_param>
+              | <str>
+              | <expr> , <out_param>
+              | <str> , <out_param>
 
 <init_arr> ::= [ <arr_val> ]
 
 <arr_val> ::= <expr>
-           | <init_arr>
-           | <expr> , <arr_val>
-           | <init_arr> , <arr_val>
+            | <init_arr>
+            | <expr> , <arr_val>
+            | <init_arr> , <arr_val>
 
 <func_def> ::= <id> ( <param_def> ) => { <stmts> }
 
 <param_def> ::= 
-             | <id>
-             | <id> , <param_def>
+              | <id>
+              | <id> , <param_def>
 
 <func_call> ::= <id> ( <params> )
 
 <params> ::= 
-          | <expr>
-          | <expr> , <params>
+           | <expr>
+           | <expr> , <params>
 
 <op> ::= +
-      | -
-      | *
-      | /
-      | mod
-      | ^
+       | -
+       | *
+       | /
+       | mod
+       | ^
 
 <comp_op> ::= ==
-           | !=
-           | <
-           | <=
-           | >
-           | >=
+            | !=
+            | <
+            | <=
+            | >
+            | >=
 
 <id> ::= <letter> 
-| <letter> <id_chars>
+       | <letter> <id_chars>
 
 <id_chars> ::= <id_char> 
-      | <id_char> <id_chars>
+             | <id_char> <id_chars>
 
 <id_char> ::= <letter> 
-     | <digit> 
- 	     | _
+            | <digit> 
+            | _
 
 <str> ::= "" 
-       | " <char_list> "
+        | " <char_list> "
 
 <char_list> ::= <letter> 
-       | <digit> 
-       | <special> 
-       | <letter> <char_list>
-             | <digit> <char_list> 
-             | <special> <char_list>
+              | <digit> 
+              | <special> 
+              | <letter> <char_list>
+              | <digit> <char_list> 
+              | <special> <char_list>
 
 <int> ::= <number> | + <number> | - <number>
 
@@ -138,33 +138,53 @@ Atlas-C is a programming language inspired by C, JavaScript, and Python. To buil
 
 ## Language Structure:
 ### Nonterminals:
-<program>: Represents the entire program and consists of a sequence of statements (<stmts>).
-<stmts>: Defines a series of statements, allowing multiple statements to be separated by semicolons  ; .
-<stmt>: Defines individual statements encompassing various structures such as variable declarations, assignments, control flow (if, while), I/O operations, function definitions, and function calls.
-<if_stmt>: Captures the conditional branching (if, else if, else) structure.
-<cond>: Represents conditional expressions used in if and while statements.
-<expr>: Represents expressions involving arithmetic, logical, and functional operations.
-<arr>: Defines arrays or array-like structures.
-<func_def>: Represents the definition of functions within the program.
-<func_call>: Captures the invocation of functions.
-<param_def>: Specifies the parameters for functions in their definitions.
+`<program>`: Represents the entire program and consists of a sequence of statements (`<stmts>`).
+
+`<stmts>`: Defines a series of statements, allowing multiple statements to be separated by semicolons `;`.
+
+`<stmt>`: Defines individual statements encompassing various structures such as variable declarations, assignments, control flow (if, while), I/O operations, function definitions, and function calls.
+
+`<if_stmt>`: Captures the conditional branching (if, else if, else) structure.
+
+`<cond>`: Represents conditional expressions used in if and while statements.
+
+`<expr>`: Represents expressions involving arithmetic, logical, and functional operations.
+
+`<arr>`: Defines arrays or array-like structures.
+
+`<func_def>`: Represents the definition of functions within the program.
+
+`<func_call>`: Captures the invocation of functions.
+
+`<param_def>`: Specifies the parameters for functions in their definitions.
 
 ### Token Usage in Grammar:
-Identifiers: ( [a-zA-Z][a-zA-Z0-9_]* ): Used for naming variables, functions, and parameters. It must start with a character and can continue with a char, a digit, or an underscore char.
-Constants: ( [+-]?[0-9]+ ): Represents integer values. It can have a sign (+/-) before.
-Strings: ( \"[^\"]*\" ): Used for string literals. Anything between two quote marks “...” is considered as a string.
-Arithmetic Operators: ( + ,  - ,  * ,  ; ,  mod ,  ^ ): Used in mathematical expressions.
-Comparison Operators: ( == ,  != ,  < ,  <= ,  > ,  >= ): Used in conditional expressions.
-Logical Operators: ( and ,  or ): Used for logical conjunction and disjunction.
-Parentheses and Brackets: ( ( ,  ) ,  { ,  } ,  [ ,  ] ): Used for grouping expressions and defining array dimensions.
-Assignment Operators: ( = ,  => ): Used for assignment and function definition assignments.
-Special Keywords: ( const ,  var ,  if ,  while ,  int ,  out ,  return ,  func ,  elif ,  else ): Keywords defining constants, variables, control flow, I/O, and function-related operations.
-Delimiters: ( ; ,  , ): Used as statement and parameter separators.
+*Identifiers*: (`[a-zA-Z][a-zA-Z0-9_]*`): Used for naming variables, functions, and parameters. It must start with a character and can continue with a char, a digit, or an underscore char.
+
+*Constants*: (`[+-]?[0-9]+`): Represents integer values. It can have a sign (+/-) before.
+
+*Strings*: (`\"[^\"]*\"`): Used for string literals. Anything between two quote marks `“...”` is considered as a string.
+
+*Arithmetic Operators*: (`+ , - ,  * ,  ; ,  mod ,  ^`): Used in mathematical expressions.
+
+*Comparison Operators*: (`== ,  != ,  < ,  <= ,  > ,  >=`): Used in conditional expressions.
+
+*Logical Operators*: (`and ,  or`): Used for logical conjunction and disjunction.
+
+*Parentheses and Brackets*: (`( ,  ) ,  { ,  } ,  [ ,  ]`): Used for grouping expressions and defining array dimensions.
+
+*Assignment Operators*: (`= ,  =>`): Used for assignment and function definition assignments.
+
+*Special Keywords*: (`const ,  var ,  if ,  while ,  int ,  out ,  return ,  func ,  elif ,  else`): Keywords defining constants, variables, control flow, I/O, and function-related operations.
+
+*Delimiters*: (`; ,  ,`): Used as statement and parameter separators.
 
 ### Resolved Ambiguities and Rules:
-Precedence Rules: The grammar specifies precedence for arithmetic, comparison, and logical operations. For instance, arithmetic ( + ,  - , etc.) has left associativity, comparison operators ( == ,  != , etc.) have left associativity, and logical operators ( and ,  or ) have left associativity.
-Control Flow Ambiguity: Ambiguities in control flow (like multiple if-else structures) are resolved by enforcing a strict pattern:  if  is followed by  {  <stmts>  } , which is optionally followed by  elif  or  else  with their respective block of statements.
-Function Call and Definition Clarity: The rules for <func_def> and <func_call> ensure clear distinction and correct usage between defining and invoking functions while considering parameters and their definitions.
+*Precedence Rules*: The grammar specifies precedence for arithmetic, comparison, and logical operations. For instance, arithmetic ( + ,  - , etc.) has left associativity, comparison operators ( == ,  != , etc.) have left associativity, and logical operators ( and ,  or ) have left associativity.
+
+*Control Flow Ambiguity*: Ambiguities in control flow (like multiple if-else structures) are resolved by enforcing a strict pattern: `if`  is followed by  `{ <stmts> }` , which is optionally followed by `elif` or `else` with their respective block of statements.
+
+*Function Call and Definition Clarity*: The rules for `<func_def>` and `<func_call>` ensure clear distinction and correct usage between defining and invoking functions while considering parameters and their definitions.
 
 ## Atlas-C Language Manual
 ### A Simple Program
