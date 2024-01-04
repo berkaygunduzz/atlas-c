@@ -1,9 +1,9 @@
 # Atlas-C
 
 ## Developers
-Berkay Gündüz
+[Berkay Gündüz](https://github.com/berkaygunduzz)
 
-Gökalp Gökdoğan
+[Gökalp Gökdoğan](https://github.com/GokalpGokdogan)
 
 ## Introduction
 Atlas-C is a programming language inspired by C, JavaScript, and Python.
